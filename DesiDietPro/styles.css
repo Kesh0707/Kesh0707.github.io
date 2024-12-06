@@ -1,0 +1,182 @@
+/* Global Styles */
+body {
+    background-color: #FFF8E1; /* Light Cream background */
+    color: #424242; /* Dark Charcoal text */
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+/* Header Styles */
+header {
+    background-color: #FFC107; /* Turmeric Yellow */
+    color: #424242; /* Dark Charcoal text */
+    text-align: center;
+    padding: 20px;
+}
+
+header h1 {
+    margin: 0;
+}
+
+/* Container for Nav Bar and Login Button */
+.nav-container {
+    display: flex;
+    justify-content: space-between; /* Distribute space between nav and button */
+    align-items: center; /* Vertically align nav and button */
+    padding: 10px 20px;
+}
+
+/* Navigation Bar Styles */
+nav ul {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li {
+    margin: 0 15px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #424242; /* Dark Charcoal text */
+    font-weight: bold;
+    padding: 10px 15px;
+}
+
+nav ul li a:hover {
+    background-color: #FF5722; /* Saffron Orange hover effect */
+    color: #FFF8E1;
+    border-radius: 5px;
+}
+
+/* signin Button Styles */
+.myaccount-button {
+    color: #424242; /* Dark Charcoal */
+  
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    border: none;
+}
+
+.myaccount-button:hover {
+    background-color: #FF5722; /* Saffron Orange */
+    color: #FFF8E1;
+    transition: background-color 0.3s;
+}
+
+/* Section Styles */
+section {
+    padding: 40px 20px;
+    text-align: center;
+}
+
+h2 {
+    color: #4CAF50; /* Deep Green for section headings */
+}
+
+/* Form Styles */
+form {
+    margin: 0 auto;
+    max-width: 400px;
+    background-color: #FFF8E1; /* Light Cream */
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+form label {
+    display: block;
+    text-align: left;
+    font-weight: bold;
+    color: #424242; /* Dark Charcoal */
+    margin: 10px 0 5px;
+}
+
+form input[type="text"],
+form input[type="email"],
+form input[type="password"],
+form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+form button {
+    background-color: #FFC107; /* Turmeric Yellow */
+    color: #424242; /* Dark Charcoal */
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 5px;
+    width: 100%;
+}
+
+form button:hover {
+    background-color: #FF5722; /* Saffron Orange */
+    color: #FFF8E1; /* Light Cream */
+}
+
+/* Footer Styles */
+footer {
+    background-color: #4CAF50; /* Deep Green */
+    color: #FFF8E1; /* Light Cream text */
+    text-align: center;
+    padding: 10px 0;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+footer p {
+    margin: 0;
+}
+
+/* Additional Utility Classes */
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+button, a.button {
+    display: inline-block;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 10px 15px;
+    border-radius: 5px;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+    .nav-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    nav ul {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    nav ul li {
+        margin: 10px 0;
+    }
+
+    .myaccount-button {
+        align-self: flex-end;
+        margin-top: 10px;
+    }
+
+    section {
+        padding: 20px 10px;
+    }
+}
