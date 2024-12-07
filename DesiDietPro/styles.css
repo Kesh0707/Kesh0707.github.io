@@ -1,7 +1,7 @@
 /* Global Styles */
 body {
-    background-color: #FFF8E1; /* Light Cream background */
-    color: #424242; /* Dark Charcoal text */
+    background-color: #FFF8E1; 
+    color: #424242; 
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
@@ -10,8 +10,8 @@ body {
 
 /* Header Styles */
 header {
-    background-color: #FFC107; /* Turmeric Yellow */
-    color: #424242; /* Dark Charcoal text */
+    background-color: #FFC107; 
+    color: #424242; 
     text-align: center;
     padding: 20px;
 }
@@ -20,15 +20,15 @@ header h1 {
     margin: 0;
 }
 
-/* Container for Nav Bar and Login Button */
+
 .nav-container {
     display: flex;
-    justify-content: space-between; /* Distribute space between nav and button */
-    align-items: center; /* Vertically align nav and button */
+    justify-content: space-between; 
+    align-items: center; 
     padding: 10px 20px;
 }
 
-/* Navigation Bar Styles */
+
 nav ul {
     list-style: none;
     display: flex;
@@ -42,7 +42,7 @@ nav ul li {
 
 nav ul li a {
     text-decoration: none;
-    color: #424242; /* Dark Charcoal text */
+    color: #424242; 
     font-weight: bold;
     padding: 10px 15px;
     background-color: #4CAF50;
@@ -50,15 +50,21 @@ nav ul li a {
 }
 
 nav ul li a:hover {
-    background-color: #FF5722; /* Saffron Orange hover effect */
+    background-color: #FF5722; 
     color: #FFF8E1;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+/* Active Page Highlight */
+nav ul li a.active {
+    background-color: #FF5722; /* Saffron Orange */
+    color: #FFF8E1; /* Light Cream */
     border-radius: 5px;
 }
 
-/* signin Button Styles */
-.myaccount-button {
-    color: #424242; /* Dark Charcoal */
-  
+.myaccount-button {  /* Need to make the button same length */
+    color: #424242; 
     border-radius: 5px;
     text-decoration: none;
     font-weight: bold;
@@ -66,7 +72,7 @@ nav ul li a:hover {
 }
 
 .myaccount-button:hover {
-    background-color: #FF5722; /* Saffron Orange */
+    background-color: #FF5722; 
     color: #FFF8E1;
     transition: background-color 0.3s;
 }
@@ -78,15 +84,15 @@ section {
 }
 
 h2 {
-    color: #4CAF50; /* Deep Green for section headings */
+    color: #4CAF50;
 }
 
 /* Form Styles */
 form {
     margin: 0 auto;
     max-width: 400px;
-    background-color: #FFF8E1; /* Light Cream */
-    padding: 20px;
+    background-color: #FF5722 ;
+    padding: 95px;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
@@ -95,7 +101,7 @@ form label {
     display: block;
     text-align: left;
     font-weight: bold;
-    color: #424242; /* Dark Charcoal */
+    color: #424242;
     margin: 10px 0 5px;
 }
 
@@ -112,10 +118,10 @@ form textarea {
 }
 
 form button {
-    background-color: #FFC107; /* Turmeric Yellow */
-    color: #424242; /* Dark Charcoal */
+    background-color: #FFC107; 
+    color: #424242; 
     border: none;
-    padding: 10px 20px;
+    padding: 10px px;
     cursor: pointer;
     font-weight: bold;
     border-radius: 5px;
@@ -123,14 +129,14 @@ form button {
 }
 
 form button:hover {
-    background-color: #FF5722; /* Saffron Orange */
-    color: #FFF8E1; /* Light Cream */
+    background-color: #4CAF50;
+    color: #FFF8E1; 
 }
 
 /* Footer Styles */
 footer {
-    background-color: #4CAF50; /* Deep Green */
-    color: #FFF8E1; /* Light Cream text */
+    background-color: #4CAF50; 
+    color: #FFF8E1;
     text-align: center;
     padding: 10px 0;
     position: relative;
@@ -157,28 +163,3 @@ button, a.button {
     border-radius: 5px;
 }
 
-/* Media Queries for Responsiveness */
-@media (max-width: 768px) {
-    .nav-container {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    nav ul {
-        flex-direction: column;
-        width: 100%;
-    }
-
-    nav ul li {
-        margin: 10px 0;
-    }
-
-    .myaccount-button {
-        align-self: flex-end;
-        margin-top: 10px;
-    }
-
-    section {
-        padding: 20px 10px;
-    }
-}
