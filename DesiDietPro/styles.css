@@ -45,6 +45,8 @@ nav ul li a {
     color: #424242; /* Dark Charcoal text */
     font-weight: bold;
     padding: 10px 15px;
+    background-color: #4CAF50;
+    border-radius: 5px;
 }
 
 nav ul li a:hover {
