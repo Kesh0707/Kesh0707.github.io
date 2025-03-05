@@ -14,11 +14,11 @@
     <!-- Navigation Bar -->
     <nav>
         <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="about.html">About Us</a></li>
-            <li><a href="features.html">Features</a></li>
-            <li><a href="contact.html">Contact Us</a></li>
-            <li><a href="myaccount.html" class="myaccount-button">My Account</a></li>
+            <li><a href="index.php">Home</a></li>
+            <li><a href="about.php">About Us</a></li>
+             <li><a href="features.php">Features</a></li>
+            <li><a href="contact.php">Contact Us</a></li>
+            <li><a href="myaccount.php" class="myaccount-button">My Account</a></li>
         </ul>
     </nav>
 

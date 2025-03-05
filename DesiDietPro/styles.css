@@ -63,6 +63,11 @@ nav ul li a.active {
     border-radius: 5px;
 }
 
+.index-button { 
+
+
+}
+
 .myaccount-button {  /* Need to make the button same length */
     color: #424242; 
     border-radius: 5px;
