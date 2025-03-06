@@ -20,7 +20,7 @@ if (isset($_GET['search'])) {
     // First, check if the search matches a DESCRIPTION (i.e., full food name)
     $sql = $conn->prepare("
         SELECT category, description, carbohydrate, protein, fat_total, fiber, sugar_total, cholesterol, calcium, iron, potassium
-        FROM general_foods 
+        FROM general_food
         WHERE description LIKE ?
         LIMIT 1
     ");
@@ -36,7 +36,7 @@ if (isset($_GET['search'])) {
     } else {
         // If no description matches, try searching by CATEGORY to return a list of descriptions
         $sql = $conn->prepare("
-            SELECT DISTINCT description FROM general_foods WHERE category LIKE ?
+            SELECT DISTINCT description FROM general_food WHERE category LIKE ?
         ");
         
         $sql->bind_param("s", $search);
