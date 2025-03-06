@@ -12,37 +12,56 @@ if ($conn->connect_error) {
 }
 
 // Get search query
-if (isset($_GET['q'])) {
-    $query = "%" . $_GET['q'] . "%";
-    error_log("🔍 Search Query: " . $_GET['q']); 
-   
-    $sql = $conn->prepare("
-    SELECT 
-        description, carbohydrate, protein, fat_total, fiber, sugar_total, cholesterol, calcium, iron, potassium
-    FROM general_food 
-    WHERE description LIKE ?
-");
+if (isset($_GET['search'])) {
+    $search = "%" . $_GET['search'] . "%";
     
-    // debugging
-if (!$sql) {
-    die(json_encode(["error" => "SQL preparation failed: " . $conn->error]));
-}
+    error_log("🔍 User searched for: " . $_GET['search']);
 
-$sql->bind_param("s", $query);
-$sql->execute();
-$result = $sql->get_result();
+    // First, check if the search matches a DESCRIPTION (i.e., full food name)
+    $sql = $conn->prepare("
+        SELECT category, description, carbohydrate, protein, fat_total, fiber, sugar_total, cholesterol, calcium, iron, potassium
+        FROM general_foods 
+        WHERE description LIKE ?
+        LIMIT 1
+    ");
+    
+    $sql->bind_param("s", $search);
+    $sql->execute();
+    $result = $sql->get_result();
 
-if ($result->num_rows > 0) {
-    $data = $result->fetch_assoc();
-    error_log("Search Result: " . json_encode($data));
-    echo json_encode($data);
-} else {
-    error_log("No results found for: " . $_GET['q']);
-    echo json_encode(["error" => "No results found"]);
-}
+    if ($result->num_rows > 0) {
+        $data = $result->fetch_assoc();
+        error_log("Found detailed food info: " . json_encode($data));
+        echo json_encode($data);
+    } else {
+        // If no description matches, try searching by CATEGORY to return a list of descriptions
+        $sql = $conn->prepare("
+            SELECT DISTINCT description FROM general_foods WHERE category LIKE ?
+        ");
+        
+        $sql->bind_param("s", $search);
+        $sql->execute();
+        $result = $sql->get_result();
 
-$sql->close();
+        $descriptions = [];
+        while ($row = $result->fetch_assoc()) {
+            $descriptions[] = $row['description'];
+        }
+
+        if (count($descriptions) > 0) {
+            error_log("Found descriptions for category: " . json_encode($descriptions));
+            echo json_encode(["descriptions" => $descriptions]);
+        } else {
+            error_log("No results found for: " . $_GET['search']);
+            echo json_encode(["error" => "No results found"]);
+        }
+    }
+
+    $sql->close();
+
+
 }
 
 $conn->close();
-?>
+?> 
+
