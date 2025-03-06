@@ -19,7 +19,7 @@ if (isset($_GET['q'])) {
     $sql = $conn->prepare("
     SELECT 
         description, carbohydrate, protein, fat_total, fiber, sugar_total, cholesterol, calcium, iron, potassium
-    FROM general_foods 
+    FROM general_food 
     WHERE description LIKE ?
 ");
     
@@ -34,10 +34,10 @@ $result = $sql->get_result();
 
 if ($result->num_rows > 0) {
     $data = $result->fetch_assoc();
-    error_log("✅ Search Result: " . json_encode($data));
+    error_log("Search Result: " . json_encode($data));
     echo json_encode($data);
 } else {
-    error_log("❌ No results found for: " . $_GET['q']);
+    error_log("No results found for: " . $_GET['q']);
     echo json_encode(["error" => "No results found"]);
 }
 
