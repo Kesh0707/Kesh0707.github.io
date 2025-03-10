@@ -47,6 +47,8 @@
             <thead>
                 <tr>
                     <th>Description</th>
+                    <th>Calories</th>
+                    <th>Macros</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -55,9 +57,16 @@
             </tbody>
         </table>
 
+        <div id="mealTotals" style="margin-top:10px; font-weight:bold;">
+            <p><strong>Total Calories:</strong> <span id="totalCals">0</span> kcal</p>
+            <p><strong>Total Protein:</strong> <span id="totalProtein">0</span> g</p>
+            <p><strong>Total Carbs:</strong> <span id="totalCarbs">0</span> g</p>
+            <p><strong>Total Fats:</strong> <span id="totalFats">0</span> g</p>
+        </div>
+
         <!-- User can name the meal, then click "Save Meal" -->
         <label for="mealName">Meal Name:</label>
-        <input type="text" id="mealName" placeholder="e.g., My Healthy Breakfast">
+        <input type="text" id="mealName" placeholder="e.g., My Healthy Meals">
         <button id="saveMealBtn" onclick="saveMeal()">Save Meal</button>
     </section>
 

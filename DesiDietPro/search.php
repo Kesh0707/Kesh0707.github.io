@@ -28,7 +28,7 @@ $search = "%" . $searchTerm . "%";
 
 // Query for items whose category matches the typed term
 $sql = $conn->prepare("
-    SELECT DISTINCT description 
+    SELECT DISTINCT description, protein, carbohydrate, fat_total 
     FROM general_food 
     WHERE category LIKE ?
     ORDER BY description
@@ -41,13 +41,15 @@ $sql->bind_param("s", $search);
 $sql->execute();
 $result = $sql->get_result();
 
-$descriptions = [];
+$items = [];
 while ($row = $result->fetch_assoc()) {
-    $descriptions[] = $row['description'];
+    // row has "description", "protein", "carbohydrate", "fat_total"
+    $items[] = $row;
 }
 
-if (count($descriptions) > 0) {
-    echo json_encode(["descriptions" => $descriptions]);
+if (count($items) > 0) {
+    // Return them as an array
+    echo json_encode(["items" => $items]);
 } else {
     echo json_encode(["error" => "No matching items found."]);
 }
