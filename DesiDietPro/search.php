@@ -1,67 +1,57 @@
 <?php
+// search.php
+// PURPOSE: Return a list of descriptions that match the typed category (like "milk")
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+header("Content-Type: application/json");
+
+// Database credentials
 $host = "localhost";
-$user = "root"; 
-$password = "Era3nile867@"; 
+$user = "root";
+$password = "Era3nile867@";
 $database = "food_db";
 
-// Connection to MySQL
 $conn = new mysqli($host, $user, $password, $database);
-
 if ($conn->connect_error) {
-    die(json_encode(["error" => "Database connection failed"]));
+    die(json_encode(["error" => "Database connection failed: " . $conn->connect_error]));
 }
 
-// Get search query
-if (isset($_GET['search'])) {
-    $search = "%" . $_GET['search'] . "%";
-    
-    error_log("🔍 User searched for: " . $_GET['search']);
-
-    // First, check if the search matches a DESCRIPTION (i.e., full food name)
-    $sql = $conn->prepare("
-        SELECT category, description, carbohydrate, protein, fat_total, fiber, sugar_total, cholesterol, calcium, iron, potassium
-        FROM general_food
-        WHERE description LIKE ?
-        LIMIT 1
-    ");
-    
-    $sql->bind_param("s", $search);
-    $sql->execute();
-    $result = $sql->get_result();
-
-    if ($result->num_rows > 0) {
-        $data = $result->fetch_assoc();
-        error_log("Found detailed food info: " . json_encode($data));
-        echo json_encode($data);
-    } else {
-        // If no description matches, try searching by CATEGORY to return a list of descriptions
-        $sql = $conn->prepare("
-            SELECT DISTINCT description FROM general_food WHERE category LIKE ?
-        ");
-        
-        $sql->bind_param("s", $search);
-        $sql->execute();
-        $result = $sql->get_result();
-
-        $descriptions = [];
-        while ($row = $result->fetch_assoc()) {
-            $descriptions[] = $row['description'];
-        }
-
-        if (count($descriptions) > 0) {
-            error_log("Found descriptions for category: " . json_encode($descriptions));
-            echo json_encode(["descriptions" => $descriptions]);
-        } else {
-            error_log("No results found for: " . $_GET['search']);
-            echo json_encode(["error" => "No results found"]);
-        }
-    }
-
-    $sql->close();
-
-
+// Check if "search" param is provided
+if (!isset($_GET['search']) || empty(trim($_GET['search']))) {
+    die(json_encode(["error" => "No search term provided"]));
 }
 
+// The user typed something like "milk"
+$searchTerm = trim($_GET['search']);
+$search = "%" . $searchTerm . "%";
+
+// Query for items whose category matches the typed term
+$sql = $conn->prepare("
+    SELECT DISTINCT description 
+    FROM general_food 
+    WHERE category LIKE ?
+    ORDER BY description
+");
+if (!$sql) {
+    die(json_encode(["error" => "SQL error: " . $conn->error]));
+}
+
+$sql->bind_param("s", $search);
+$sql->execute();
+$result = $sql->get_result();
+
+$descriptions = [];
+while ($row = $result->fetch_assoc()) {
+    $descriptions[] = $row['description'];
+}
+
+if (count($descriptions) > 0) {
+    echo json_encode(["descriptions" => $descriptions]);
+} else {
+    echo json_encode(["error" => "No matching items found."]);
+}
+
+$sql->close();
 $conn->close();
-?> 
-
+?>

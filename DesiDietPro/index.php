@@ -2,15 +2,14 @@
 <html lang="en">
 <head>
     <!--
-    Keshav Parikh
-    HTML page created 
-    DesiDietPro
-    20/11/2024
+      Keshav Parikh
+      DesiDietPro
+      Final Example
     -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
     <title>DesiDietPro</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
@@ -30,30 +29,43 @@
     </nav>
 
     <section>
-        <h1>Search for Ingredients or Dishes</h1>
+        <h2>Search by Category</h2>
+        <!-- User types the category here (e.g. "milk") -->
+        <input 
+            type="text" 
+            id="categoryInput" 
+            placeholder="Type a category (e.g. Milk, Rice, Lentils...)" 
+            onkeyup="fetchCategory()"
+        />
 
-        <!-- Updated Search Form with Drop-down Suggestions -->
-        <label for="searchInput">Search by Category or Description:</label>
-        <input type="text" id="searchInput" onkeyup="fetchSearchResults()" list="searchResults">
-        
-        <!-- Drop-down List for Search Suggestions -->
-        <datalist id="searchResults"></datalist>
+        <!-- Unordered list to display the matching items in that category -->
+        <ul id="suggestions"></ul>
 
-        <!-- Display Nutritional Data -->
-        <h2>Food Details:</h2>
-        <div id="foodDetails"></div>
+        <h2>Create Your Meal</h2>
+        <!-- Table that lists the items the user has added to their meal -->
+        <table id="mealTable" border="1">
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Items will be added here via JavaScript -->
+            </tbody>
+        </table>
 
-        <!-- Section to Display Selected Dishes -->
-        <div id="selectedDishes">
-            <h2>Selected Dishes</h2>
-            <ul id="selectedList"></ul>
-        </div> 
+        <!-- User can name the meal, then click "Save Meal" -->
+        <label for="mealName">Meal Name:</label>
+        <input type="text" id="mealName" placeholder="e.g., My Healthy Breakfast">
+        <button id="saveMealBtn" onclick="saveMeal()">Save Meal</button>
     </section>
 
     <footer>
         <p><small>Website created by Keshav Parikh</small></p>
     </footer>
 
-    <script src="script.js"></script> <!-- Link to JavaScript -->
+    <!-- Link to external JavaScript file -->
+    <script src="script.js"></script>
 </body>
 </html>
