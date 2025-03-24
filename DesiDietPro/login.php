@@ -1,13 +1,17 @@
 <?php
+// login.php: Handles user login and session creation
+
 session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-$errorMsg = ""; // Initialize error message variable
+// Initialize variables to avoid undefined variable warnings
+$loginSuccess = false;
+$errorMsg = "";
 
-// Process login when form is submitted
+// Process form submission if POST method is used
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    // Database connection details
+    // Database connection settings
     $host = "localhost";
     $dbUser = "root";
     $dbPassword = "Era3nile867@";
@@ -18,27 +22,27 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         die("Database connection failed: " . $conn->connect_error);
     }
 
-    // Get and sanitize input
+    // Sanitize inputs
     $username = trim($_POST['username']);
     $passwordPlain = trim($_POST['password']);
 
-    // Prepare SQL query to fetch user details
+    // Prepare SQL to fetch user data by username
     $stmt = $conn->prepare("SELECT id, password_hash FROM users WHERE username = ?");
-    if (!$stmt) {
-        $errorMsg = "SQL error: " . $conn->error;
-    } else {
+    if ($stmt) {
         $stmt->bind_param("s", $username);
         $stmt->execute();
         $result = $stmt->get_result();
 
-        // Check if user exists
+        // Check if the user exists
         if ($result->num_rows === 1) {
             $row = $result->fetch_assoc();
-            // Verify the provided password
+            // Verify the password
             if (password_verify($passwordPlain, $row['password_hash'])) {
-                // Store user details in session and redirect to dashboard.php
+                // Login successful: store user info in session
                 $_SESSION['user_id'] = $row['id'];
                 $_SESSION['username'] = $username;
+                $loginSuccess = true;
+                // Redirect to a dashboard or My Account page
                 header("Location: dashboard.php");
                 exit();
             } else {
@@ -48,6 +52,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $errorMsg = "User not found!";
         }
         $stmt->close();
+    } else {
+        $errorMsg = "SQL error: " . $conn->error;
     }
     $conn->close();
 }
@@ -64,30 +70,33 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <header>
         <h1>Login to DesiDietPro</h1>
     </header>
+    <!--Navigation Bar-->
     <nav>
         <ul>
             <li><a href="index.php">Home</a></li>
             <li><a href="about.php">About Us</a></li>
             <li><a href="features.php">Features</a></li>
             <li><a href="contact.php">Contact Us</a></li>
-            <li><a href="myaccount.php" class="myaccount-button">My Account</a></li>
         </ul>
     </nav>
     <section>
-        <h2>Log in to DesiDietPro!</h2>
-        <?php if (!empty($errorMsg)): ?>
-            <p style="color:red;"><?php echo htmlspecialchars($errorMsg); ?></p>
+        <?php if ($loginSuccess): ?>
+            <p>Login successful! Redirecting...</p>
+        <?php else: ?>
+            <?php if (!empty($errorMsg)): ?>
+                <p style="color:red;"><?php echo htmlspecialchars($errorMsg); ?></p>
+            <?php endif; ?>
+            <form action="login.php" method="POST">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+                <br>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+                <br>
+                <button type="submit">Login</button>
+            </form>
+            <p>Don't have an account? <a href="register.php">Register here</a>.</p>
         <?php endif; ?>
-        <form action="myaccount.php" method="POST">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
-            <br>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-            <br>
-            <button type="submit">Login</button>
-        </form>
-        <p>Don't have an account? <a href="register.php" class="register-button">Register here!</a></p>
     </section>
 </body>
 </html>

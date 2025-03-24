@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,20 +15,23 @@
 <body>
     <header>
         <h1>DesiDietPro</h1>
-        <p>This application helps you understand the benefits of Indian meals and how to balance them!</p>
+        <?php if(isset($_SESSION['user_id'])): ?>
+            <p>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>! <a href="logout.php">Logout</a></p>
+        <?php else: ?>
+            <p>Welcome, Guest! <a href="myaccount.php">Login</a> or <a href="register.php">Register</a></p>
+        <?php endif; ?>
     </header>
-
-    <!--Navigation Bar-->
     <nav>
         <ul>
             <li><a href="index.php">Home</a></li>
             <li><a href="about.php">About Us</a></li>
             <li><a href="features.php">Features</a></li>
             <li><a href="contact.php">Contact Us</a></li>
-            <li><a href="myaccount.php" class="myaccount-button">My Account</a></li>
+            <?php if(isset($_SESSION['user_id'])): ?>
+                <li><a href="myaccount.php" class="myaccount-button">My Account</a></li>
+            <?php endif; ?>
         </ul>
     </nav>
-
     <section>
         <h2>Search by Category</h2>
         <!-- User types the category here (e.g. "milk") -->
@@ -47,13 +51,14 @@
             <thead>
                 <tr>
                     <th>Description</th>
+                    <th>Amount (g/ml)</th>
                     <th>Calories</th>
                     <th>Macros</th>
                     <th>Action</th>
                 </tr>
             </thead>
             <tbody>
-                <!-- Items will be added here via JavaScript -->
+                <!-- Items will be dynamically inserted here -->
             </tbody>
         </table>
 

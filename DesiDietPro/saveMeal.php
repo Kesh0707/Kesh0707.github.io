@@ -1,6 +1,15 @@
 <?php
 // saveMeal.php
-// PURPOSE: Save the user's custom meal (meal name + items) to the database.
+// PURPOSE: Save the user's custom meal (meal name + items) to the database, associated with their user account.
+
+// Start session to access user data
+session_start();
+
+// Ensure the user is logged in
+if (!isset($_SESSION['user_id'])) {
+    die(json_encode(["error" => "Unauthorized: User not logged in"]));
+}
+$user_id = $_SESSION['user_id'];
 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
@@ -27,33 +36,33 @@ if (!isset($data['mealName']) || !isset($data['items'])) {
     exit();
 }
 
-$mealName = $data['mealName'];
+$mealName = trim($data['mealName']);
 $items = $data['items'];
 
-// 1) Insert the meal name into a "meals" table
-$sqlMeal = $conn->prepare("INSERT INTO meals (meal_name) VALUES (?)");
-if (!$sqlMeal) {
+// 1) Insert the meal name along with the user's ID into the "meals" table
+$stmt = $conn->prepare("INSERT INTO meals (user_id, meal_name) VALUES (?, ?)");
+if (!$stmt) {
     echo json_encode(["error" => "SQL error: " . $conn->error]);
     exit();
 }
-$sqlMeal->bind_param("s", $mealName);
-$sqlMeal->execute();
-$mealId = $sqlMeal->insert_id;
-$sqlMeal->close();
+$stmt->bind_param("is", $user_id, $mealName);
+$stmt->execute();
+$mealId = $stmt->insert_id;
+$stmt->close();
 
-// 2) Insert each item (description) into a "meal_items" table
-$sqlItem = $conn->prepare("INSERT INTO meal_items (meal_id, description) VALUES (?, ?)");
-if (!$sqlItem) {
+// 2) Insert each item (description) into the "meal_items" table
+$stmtItem = $conn->prepare("INSERT INTO meal_items (meal_id, description) VALUES (?, ?)");
+if (!$stmtItem) {
     echo json_encode(["error" => "SQL error: " . $conn->error]);
     exit();
 }
 
 foreach ($items as $desc) {
-    $sqlItem->bind_param("is", $mealId, $desc);
-    $sqlItem->execute();
+    $stmtItem->bind_param("is", $mealId, $desc);
+    $stmtItem->execute();
 }
 
-$sqlItem->close();
+$stmtItem->close();
 $conn->close();
 
 // If everything worked, return success
