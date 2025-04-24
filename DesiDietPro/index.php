@@ -33,15 +33,15 @@
         </ul>
     </nav>
     <section>
-        <h2>Search by Category</h2>
-        <!-- User types the category here (e.g. "milk") -->
+            <h2>Search Foods by Name</h2>
+        <!-- User types the food name here (e.g. "dal", "paneer", "milk") -->
         <input 
             type="text" 
             id="categoryInput" 
-            placeholder="Type a category (e.g. Milk, Rice, Lentils...)" 
-            onkeyup="fetchCategory()"
+            placeholder="Search foods like Dal, Paneer, Milk..." 
+            onkeyup="fetchDescription()"
         />
-
+    
         <!-- Unordered list to display the matching items in that category -->
         <ul id="suggestions"></ul>
 

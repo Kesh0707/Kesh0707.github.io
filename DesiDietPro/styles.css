@@ -1,128 +1,185 @@
-
-
-/* styles.css */
+/* Global Style Reset */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #fff7e6;
-    margin: 20px;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #FFF8E1; /* Light Cream */
+    margin: 0;
+    padding: 20px;
+    color: #424242; /* Dark Charcoal */
 }
 
-header, nav, section, footer {
-    margin-bottom: 20px;
-}
-
+/* Header */
 header h1 {
-    color: #ff8c00;
+    color: #FF5722; /* Saffron Orange */
     margin: 0;
 }
 
+/* Navigation */
 nav ul {
     list-style-type: none;
     padding: 0;
-    overflow: hidden;
-    margin: 0 0 20px 0;
-}
-
-nav li {
-    float: left;
-    margin-right: 10px;
+    margin: 20px 0;
+    display: flex;
+    gap: 10px;
 }
 
 nav a {
     text-decoration: none;
-    background-color: #ffa64d;
-    color: white;
-    padding: 8px 16px;
-    border-radius: 4px;
+    background-color: #FFC107; /* Turmeric Yellow */
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
 }
 
 nav a:hover {
-    background-color: #ff8c00;
+    background-color: #FF5722; /* Saffron Orange */
 }
 
+/* Headings */
 h2 {
-    color: #ff8c00;
+    color: #4CAF50; /* Deep Green */
+    margin-top: 30px;
 }
 
+/* Inputs */
 input[type="text"] {
-    padding: 6px;
-    margin: 5px 0;
-    font-size: 14px;
+    padding: 8px;
+    font-size: 15px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    width: 100%;
+    max-width: 300px;
+    box-sizing: border-box;
 }
 
+/* Suggestions Box */
 #suggestions {
-    list-style-type: none;
+    list-style: none;
     padding: 0;
     max-width: 400px;
     border: 1px solid #ccc;
     background-color: #fff;
+    border-radius: 4px;
+    margin-top: 5px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 #suggestions li {
-    padding: 8px;
-    border-bottom: 1px solid #ccc;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 #suggestions li button {
-    background-color: #28a745;
+    background-color: #4CAF50; /* Deep Green */
     color: #fff;
     border: none;
-    padding: 5px 8px;
+    padding: 6px 12px;
     border-radius: 4px;
     cursor: pointer;
 }
 
 #suggestions li button:hover {
-    background-color: #218838;
+    background-color: #388E3C;
 }
 
+/* Meal Table */
 table {
-    margin-top: 10px;
+    width: 100%;
+    max-width: 800px;
+    margin-top: 20px;
     border-collapse: collapse;
-    width: 60%;
+    background-color: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 th {
-    background-color: #ff8c00;
+    background-color: #FFC107; /* Turmeric Yellow */
     color: #fff;
-    padding: 8px;
+    padding: 10px;
+    text-align: left;
 }
 
 td {
-    padding: 8px;
-    border-bottom: 1px solid #ccc;
+    padding: 12px;
+    border-bottom: 1px solid #eee;
 }
 
 td button {
-    background-color: #dc3545;
+    background-color: #FF5722; /* Saffron Orange */
     color: #fff;
     border: none;
-    padding: 5px 8px;
+    padding: 6px 10px;
     border-radius: 4px;
     cursor: pointer;
 }
 
 td button:hover {
-    background-color: #c82333;
+    background-color: #E64A19;
 }
 
+/* Save Button */
 #saveMealBtn {
-    background-color: #ffa64d;
+    background-color: #4CAF50; /* Deep Green */
     color: white;
     border: none;
-    padding: 8px 16px;
-    border-radius: 4px;
+    padding: 10px 20px;
+    border-radius: 6px;
     cursor: pointer;
-    margin-top: 5px;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
 }
 
 #saveMealBtn:hover {
-    background-color: #ff8c00;
+    background-color: #388E3C;
 }
 
+/* Footer */
 footer p {
     text-align: center;
     color: #999;
     font-size: 14px;
     margin-top: 40px;
+}
+
+/* Drag-and-Drop Meal Zones */
+.mealBox {
+    border: 1px solid #ddd;
+    padding: 12px;
+    margin-bottom: 12px;
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    cursor: grab;
+    position: relative;
+}
+
+.mealZone,
+#savedMealsContainer {
+    border: 2px dashed #FFC107; /* Turmeric Yellow */
+    background-color: #fffef9;
+    padding: 16px;
+    min-height: 120px;
+    margin-bottom: 30px;
+    border-radius: 6px;
+}
+
+/* Return Button */
+.returnButton {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background-color: #FF5722; /* Saffron Orange */
+    color: #fff;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.returnButton:hover {
+    background-color: #E64A19;
 }
