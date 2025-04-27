@@ -16,27 +16,34 @@
         <ul>
             <li><a href="index.php">Home</a></li>
             <li><a href="about.php">About Us</a></li>
-             <li><a href="features.php">Features</a></li>
+            <li><a href="features.php">Features</a></li>
             <li><a href="contact.php">Contact Us</a></li>
             <li><a href="myaccount.php" class="myaccount-button">My Account</a></li>
         </ul>
     </nav>
 
-    <section>
-        <h2>Contact us</h2>
-        <form>
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required><br><br>
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required><br><br>
-            <label for="message">Message:</label>
-            <textarea id="message" name="message" rows="4" required></textarea><br><br>
-            <button type="submit">Send Message</button>
-        </form>
-    </section>
+    <section class="contact-section">
+  <h2>We'd love to hear from you!</h2>
+  <p>If you have any questions, feedback, or suggestions, please fill out the form below. We'll get back to you as soon as we can.</p>
+
+  <form action="#" method="POST">
+    <label for="name">Your Name:</label>
+    <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+
+    <label for="email">Your Email:</label>
+    <input type="email" id="email" name="email" placeholder="Enter your email address" required>
+
+    <label for="message">Your Message:</label>
+    <textarea id="message" name="message" placeholder="Type your message here..." required></textarea>
+
+    <button type="submit">Send Message</button>
+  </form>
+</section>
+
 
     <footer>
         <p><small>Website created by Keshav Parikh</small></p>
     </footer>
 </body>
 </html>
+ 

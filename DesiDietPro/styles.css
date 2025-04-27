@@ -1,15 +1,15 @@
 /* Global Style Reset */
 body {
     font-family: 'Segoe UI', sans-serif;
-    background-color: #FFF8E1; /* Light Cream */
+    background-color: #FFF8E1;
     margin: 0;
     padding: 20px;
-    color: #424242; /* Dark Charcoal */
+    color: #424242;
 }
 
 /* Header */
 header h1 {
-    color: #FF5722; /* Saffron Orange */
+    color: #FF5722;
     margin: 0;
 }
 
@@ -24,7 +24,7 @@ nav ul {
 
 nav a {
     text-decoration: none;
-    background-color: #FFC107; /* Turmeric Yellow */
+    background-color: #FFC107;
     color: #fff;
     padding: 10px 18px;
     border-radius: 6px;
@@ -32,51 +32,96 @@ nav a {
 }
 
 nav a:hover {
-    background-color: #FF5722; /* Saffron Orange */
+    background-color: #FF5722;
 }
 
 /* Headings */
 h2 {
-    color: #4CAF50; /* Deep Green */
+    color: #4CAF50;
     margin-top: 30px;
 }
 
+/* Main Section Layout */
+.main-section {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-top: 30px;
+}
+
+@media screen and (min-width: 768px) {
+    .main-section {
+        flex-direction: row;
+    }
+    .left-section {
+        flex: 2;
+    }
+    .right-section {
+        flex: 1;
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+}
+
 /* Inputs */
-input[type="text"] {
+input[type="text"],
+input[type="number"],
+input[type="email"],
+select,
+textarea {
     padding: 8px;
     font-size: 15px;
-    border: 1px solid #ccc;
+    border: none;
     border-radius: 6px;
     width: 100%;
-    max-width: 300px;
     box-sizing: border-box;
+    background-color: #fff;
+    box-shadow: 0 0 2px rgba(0,0,0,0.1);
+    outline: none;
+    margin-bottom: 12px;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="email"]:focus,
+select:focus,
+textarea:focus {
+    box-shadow: 0 0 5px rgba(76,175,80,0.5);
 }
 
 /* Suggestions Box */
+#categoryInput {
+    margin-bottom: 15px;
+}
+
 #suggestions {
     list-style: none;
     padding: 0;
-    max-width: 400px;
-    border: 1px solid #ccc;
+    margin-top: 5px;
     background-color: #fff;
     border-radius: 4px;
-    margin-top: 5px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 #suggestions li {
-    padding: 10px;
+    padding: 8px;
     border-bottom: 1px solid #eee;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
+#suggestions li:last-child {
+    border-bottom: none;
+}
+
 #suggestions li button {
-    background-color: #4CAF50; /* Deep Green */
+    background-color: #4CAF50;
     color: #fff;
     border: none;
-    padding: 6px 12px;
+    padding: 6px 10px;
     border-radius: 4px;
     cursor: pointer;
 }
@@ -88,7 +133,7 @@ input[type="text"] {
 /* Meal Table */
 table {
     width: 100%;
-    max-width: 800px;
+    max-width: 100%;
     margin-top: 20px;
     border-collapse: collapse;
     background-color: #fff;
@@ -96,7 +141,7 @@ table {
 }
 
 th {
-    background-color: #FFC107; /* Turmeric Yellow */
+    background-color: #FFC107;
     color: #fff;
     padding: 10px;
     text-align: left;
@@ -108,7 +153,7 @@ td {
 }
 
 td button {
-    background-color: #FF5722; /* Saffron Orange */
+    background-color: #FF5722;
     color: #fff;
     border: none;
     padding: 6px 10px;
@@ -120,9 +165,10 @@ td button:hover {
     background-color: #E64A19;
 }
 
-/* Save Button */
-#saveMealBtn {
-    background-color: #4CAF50; /* Deep Green */
+/* Save and Submit Buttons */
+#saveMealBtn,
+button[type="submit"] {
+    background-color: #4CAF50;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -132,7 +178,8 @@ td button:hover {
     transition: background-color 0.3s ease;
 }
 
-#saveMealBtn:hover {
+#saveMealBtn:hover,
+button[type="submit"]:hover {
     background-color: #388E3C;
 }
 
@@ -144,21 +191,10 @@ footer p {
     margin-top: 40px;
 }
 
-/* Drag-and-Drop Meal Zones */
-.mealBox {
-    border: 1px solid #ddd;
-    padding: 12px;
-    margin-bottom: 12px;
-    background-color: #fff;
-    border-radius: 4px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
-    cursor: grab;
-    position: relative;
-}
-
+/* Meal Zones for Drag-and-Drop */
 .mealZone,
 #savedMealsContainer {
-    border: 2px dashed #FFC107; /* Turmeric Yellow */
+    border: 2px dashed #FFC107;
     background-color: #fffef9;
     padding: 16px;
     min-height: 120px;
@@ -166,12 +202,23 @@ footer p {
     border-radius: 6px;
 }
 
+.mealBox {
+    border: 1px solid #ddd;
+    padding: 12px;
+    margin-bottom: 12px;
+    background-color: #fff;
+    border-radius: 4px;
+    cursor: grab;
+    position: relative;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+
 /* Return Button */
 .returnButton {
     position: absolute;
     top: 8px;
     right: 8px;
-    background-color: #FF5722; /* Saffron Orange */
+    background-color: #FF5722;
     color: #fff;
     border: none;
     padding: 4px 8px;
@@ -182,4 +229,102 @@ footer p {
 
 .returnButton:hover {
     background-color: #E64A19;
+}
+
+/* Contact Page Styling */
+.contact-section {
+    max-width: 700px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 30px 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.contact-section form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.contact-section textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+/* Login Page Styling */
+.login-section {
+    max-width: 400px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 30px 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.login-section form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Features Section */
+section h2 {
+    color: #4CAF50;
+    margin-top: 30px;
+    font-size: 28px;
+}
+
+section h3 {
+    color: #FF5722;
+    margin-top: 20px;
+    font-size: 22px;
+}
+
+section p,
+section ul {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #424242;
+    margin-bottom: 20px;
+    max-width: 800px;
+}
+
+section ul {
+    list-style-type: disc;
+    padding-left: 30px;
+}
+
+section ul li strong {
+    color: #FF5722;
+}
+
+/* Header Layout */
+.header-flex {
+    position: relative;
+    padding: 20px;
+}
+
+.header-user {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.welcome-left p {
+    margin: 0;
+    font-size: 16px;
+    color: #424242;
+}
+
+.logout-right a {
+    color: #4CAF50;
+    text-decoration: none;
+    font-weight: bold;
+    margin-left: 15px;
+}
+
+.logout-right a:hover {
+    text-decoration: underline;
 }

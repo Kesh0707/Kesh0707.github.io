@@ -2,25 +2,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!--
-      Keshav Parikh
-      DesiDietPro
-      Final Example
-    -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DesiDietPro</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
+    <header class="header-flex">
         <h1>DesiDietPro</h1>
-        <?php if(isset($_SESSION['user_id'])): ?>
-            <p>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>! <a href="logout.php">Logout</a></p>
-        <?php else: ?>
-            <p>Welcome, Guest! <a href="myaccount.php">Login</a> or <a href="register.php">Register</a></p>
-        <?php endif; ?>
+        <div class="header-user">
+            <?php if(isset($_SESSION['user_id'])): ?>
+                <div class="welcome-left">
+                    <p>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>!</p>
+                </div>
+                <div class="logout-right">
+                    <a href="logout.php">Logout</a>
+                </div>
+            <?php else: ?>
+                <div class="welcome-left">
+                    <p>Welcome, Guest!</p>
+                </div>
+                <div class="logout-right">
+                    <a href="myaccount.php">Login</a> | <a href="register.php">Register</a>
+                </div>
+            <?php endif; ?>
+        </div>
     </header>
+
     <nav>
         <ul>
             <li><a href="index.php">Home</a></li>
@@ -32,54 +40,73 @@
             <?php endif; ?>
         </ul>
     </nav>
-    <section>
-            <h2>Search Foods by Name</h2>
-        <!-- User types the food name here (e.g. "dal", "paneer", "milk") -->
-        <input 
-            type="text" 
-            id="categoryInput" 
-            placeholder="Search foods like Dal, Paneer, Milk..." 
-            onkeyup="fetchDescription()"
-        />
-    
-        <!-- Unordered list to display the matching items in that category -->
-        <ul id="suggestions"></ul>
 
-        <h2>Create Your Meal</h2>
-        <!-- Table that lists the items the user has added to their meal -->
-        <table id="mealTable" border="1">
-            <thead>
-                <tr>
-                    <th>Description</th>
-                    <th>Amount (g/ml)</th>
-                    <th>Calories</th>
-                    <th>Macros</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Items will be dynamically inserted here -->
-            </tbody>
-        </table>
+    <section class="main-section">
+        <!-- Left Section: Meal Builder + Save Meal + Add Food -->
+        <div class="left-section">
+            <h2>Meal Builder</h2>
+            <table id="mealTable" border="1">
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Amount</th>
+                        <th>Calories</th>
+                        <th>Macros</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Items dynamically inserted -->
+                </tbody>
+            </table>
 
-        <div id="mealTotals" style="margin-top:10px; font-weight:bold;">
-            <p><strong>Total Calories:</strong> <span id="totalCals">0</span> kcal</p>
-            <p><strong>Total Protein:</strong> <span id="totalProtein">0</span> g</p>
-            <p><strong>Total Carbs:</strong> <span id="totalCarbs">0</span> g</p>
-            <p><strong>Total Fats:</strong> <span id="totalFats">0</span> g</p>
+            <div id="mealTotals" style="margin-top:20px; font-weight:bold;">
+                <p><strong>Total Calories:</strong> <span id="totalCals">0</span> kcal</p>
+                <p><strong>Total Protein:</strong> <span id="totalProtein">0</span> g</p>
+                <p><strong>Total Carbs:</strong> <span id="totalCarbs">0</span> g</p>
+                <p><strong>Total Fats:</strong> <span id="totalFats">0</span> g</p>
+            </div>
+
+            <hr style="margin: 30px 0;">
+
+            <h2>Save Your Meal</h2>
+                <form id="saveMealForm" onsubmit="event.preventDefault(); saveMeal();">
+                    <label for="mealName">Meal Name:</label>
+                    <input type="text" id="mealName" name="mealName" placeholder="e.g., Healthy Lunch" required>
+                    <button id="saveMealBtn" type="submit">Save Meal</button>
+                </form>
+
+
+            <hr style="margin: 30px 0;">
+
+            <h2>Add Your Own Food</h2>
+            <form id="createFoodForm" action="addFood.php" method="POST">
+                <input type="text" name="description" placeholder="Food Name (e.g., Kidney Beans (1 handful))" required>
+                <input type="number" name="protein" step="0.01" placeholder="Protein (g)" required>
+                <input type="number" name="carbohydrate" step="0.01" placeholder="Carbohydrates (g)" required>
+                <input type="number" name="fat_total" step="0.01" placeholder="Fat (g)" required>
+                <button type="submit" id="saveMealBtn">Add Food to Database</button>
+            </form>
         </div>
 
-        <!-- User can name the meal, then click "Save Meal" -->
-        <label for="mealName">Meal Name:</label>
-        <input type="text" id="mealName" placeholder="e.g., My Healthy Meals">
-        <button id="saveMealBtn" onclick="saveMeal()">Save Meal</button>
+        <!-- Right Section: Search Foods -->
+        <div class="right-section">
+            <h2>Search Foods</h2>
+            <input 
+                type="text" 
+                id="categoryInput" 
+                placeholder="Search foods like Dal, Paneer, Milk..." 
+                onkeyup="fetchDescription()"
+            />
+            <ul id="suggestions"></ul>
+        </div>
+
     </section>
 
     <footer>
         <p><small>Website created by Keshav Parikh</small></p>
     </footer>
 
-    <!-- Link to external JavaScript file -->
     <script src="script.js"></script>
 </body>
 </html>
