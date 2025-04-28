@@ -1,220 +1,305 @@
-// ----------------------------
-// 1. FETCH DESCRIPTION SUGGESTIONS
-// ----------------------------
-function fetchDescription() {
-    let query = document.getElementById("categoryInput").value.trim();
+// script.js
+// Dish builder and meal planner stuff
 
+// gets food suggestions when typing
+function fetchDescription() {
+    var input = document.getElementById("categoryInput");
+    var suggestions = document.getElementById("suggestions");
+
+    if (!input || !suggestions) return; // just bail if missing
+
+    var query = input.value.trim();
     if (query.length === 0) {
-        document.getElementById("suggestions").innerHTML = "";
+        suggestions.innerHTML = "";
         return;
     }
 
-    fetch(`search.php?search=${encodeURIComponent(query)}`)
-        .then(response => response.json())
-        .then(data => {
-            let suggestionsList = document.getElementById("suggestions");
-            suggestionsList.innerHTML = "";
+    fetch("search.php?search=" + encodeURIComponent(query))
+    .then(function(response) {
+        return response.json();
+    })
+    .then(function(data) {
+        suggestions.innerHTML = "";
 
-            if (data.error) {
-                let li = document.createElement("li");
-                li.textContent = data.error;
-                suggestionsList.appendChild(li);
-                return;
-            }
+        if (data.error) {
+            var li = document.createElement("li");
+            li.textContent = data.error;
+            suggestions.appendChild(li);
+            return;
+        }
 
-            if (data.items) {
-                data.items.forEach(item => {
-                    let protein = parseFloat(item.protein) || 0;
-                    let carbs = parseFloat(item.carbohydrate) || 0;
-                    let fat = parseFloat(item.fat_total) || 0;
-                    let cals = (protein * 4) + (carbs * 4) + (fat * 9);
+        if (data.items) {
+            data.items.forEach(function(item) {
+                var protein = parseFloat(item.protein) || 0;
+                var carbs = parseFloat(item.carbohydrate) || 0;
+                var fat = parseFloat(item.fat_total) || 0;
+                var cals = protein*4 + carbs*4 + fat*9;
 
-                    let li = document.createElement("li");
-                    li.textContent = `${item.description} (~${cals.toFixed(0)} cal)`;
+                var li = document.createElement("li");
+                li.textContent = item.description + " (~" + Math.round(cals) + " cal)";
 
-                    let addButton = document.createElement("button");
-                    addButton.textContent = "Add";
-                    addButton.style.marginLeft = "10px";
-                    addButton.onclick = function () {
-                        addToMeal(item.description, protein, carbs, fat, cals);
-                    };
-
-                    li.appendChild(addButton);
-                    suggestionsList.appendChild(li);
+                var btn = document.createElement("button");
+                btn.textContent = "Add";
+                btn.style.marginLeft = "8px";
+                btn.addEventListener("click", function() {
+                    addToMeal(item.description, protein, carbs, fat, cals);
                 });
-            } else {
-                let li = document.createElement("li");
-                li.textContent = "No matching items found.";
-                suggestionsList.appendChild(li);
-            }
-        })
-        .catch(error => console.error("❌ Fetch Error:", error));
+
+                li.appendChild(btn);
+                suggestions.appendChild(li);
+            });
+        }
+    })
+    .catch(function(err) {
+        console.log("fetch failed?", err); // didn't bother with fancy error here
+    });
 }
 
-// ----------------------------
-// 2. ADD SELECTED ITEM TO MEAL
-// ----------------------------
+// adds item to meal table
 function addToMeal(description, proteinPer100, carbsPer100, fatPer100, calsPer100) {
-    const mealTableBody = document.getElementById("mealTable").querySelector("tbody");
-    const newRow = mealTableBody.insertRow();
+    let table = document.getElementById("mealTable");
+    if (!table) return;
+    let tbody = table.querySelector("tbody");
+    let row = tbody.insertRow();
 
-    const unitConversions = {
-        "g": 1,
-        "ml": 1,
-        "pinch": 0.36,
-        "dash": 0.6,
-        "handful": 35,
-        "fistful": 28,
-        "katori": 200,
-        "chammach": 15,
-        "chhoti chammach": 5,
-        "cup": 240
+    // quick unit map (could be expanded later maybe)
+    const units = {
+        "g": 1, "ml": 1, "pinch": 0.36, "dash": 0.6,
+        "handful": 35, "fistful": 28, "katori": 200,
+        "chammach": 15, "chhoti chammach": 5, "cup": 240
     };
 
-    newRow.insertCell(0).textContent = description;
+    row.insertCell(0).textContent = description;
 
-    const amountCell = newRow.insertCell(1);
-    const amountInput = document.createElement("input");
-    amountInput.type = "number";
-    amountInput.min = "1";
-    amountInput.value = "1";
-    amountInput.style.width = "50px";
+    var amtCell = row.insertCell(1);
+    var input = document.createElement("input");
+    input.type = "number";
+    input.min = "1";
+    input.value = "1";
+    input.style.width = "45px";
 
-    const unitSelect = document.createElement("select");
-    ["g", "ml", "pinch", "dash", "handful", "fistful", "katori", "chammach", "chhoti chammach", "cup"].forEach(unit => {
-        const option = document.createElement("option");
-        option.value = unit;
-        option.textContent = unit;
-        unitSelect.appendChild(option);
+    var unitSelect = document.createElement("select");
+    for (let u in units) {
+        var opt = document.createElement("option");
+        opt.value = u;
+        opt.textContent = u;
+        unitSelect.appendChild(opt);
+    }
+
+    amtCell.appendChild(input);
+    amtCell.appendChild(unitSelect);
+
+    var calCell = row.insertCell(2);
+    var macroCell = row.insertCell(3);
+    var actionCell = row.insertCell(4);
+
+    var removeBtn = document.createElement("button");
+    removeBtn.textContent = "Remove";
+    removeBtn.addEventListener("click", function() {
+        tbody.removeChild(row);
+        calculateMealTotal();
     });
 
-    amountCell.appendChild(amountInput);
-    amountCell.appendChild(unitSelect);
-
-    const calCell = newRow.insertCell(2);
-    const macroCell = newRow.insertCell(3);
-    const actionCell = newRow.insertCell(4);
-
-    const removeButton = document.createElement("button");
-    removeButton.textContent = "Remove";
-    removeButton.onclick = function () {
-        mealTableBody.removeChild(newRow);
-        calculateMealTotal();
-    };
-    actionCell.appendChild(removeButton);
+    actionCell.appendChild(removeBtn);
 
     function updateMacros() {
-        const amount = parseFloat(amountInput.value) || 0;
-        const selectedUnit = unitSelect.value;
-        const unitFactor = unitConversions[selectedUnit] || 1;
-        const adjustedAmount = amount * unitFactor; // in g/ml
-        const factor = adjustedAmount / 100;
+        let amt = parseFloat(input.value) || 0;
+        let unit = unitSelect.value;
+        let factor = (amt * units[unit]) / 100;
 
-        const protein = proteinPer100 * factor;
-        const carbs = carbsPer100 * factor;
-        const fat = fatPer100 * factor;
-        const cals = calsPer100 * factor;
+        let p = proteinPer100 * factor;
+        let c = carbsPer100 * factor;
+        let f = fatPer100 * factor;
+        let k = calsPer100 * factor;
 
-        macroCell.setAttribute("data-protein", protein.toFixed(2));
-        macroCell.setAttribute("data-carbs", carbs.toFixed(2));
-        macroCell.setAttribute("data-fat", fat.toFixed(2));
-        calCell.setAttribute("data-calories", cals.toFixed(2));
+        macroCell.dataset.protein = p.toFixed(2);
+        macroCell.dataset.carbs = c.toFixed(2);
+        macroCell.dataset.fat = f.toFixed(2);
+        calCell.dataset.calories = k.toFixed(2);
 
-        calCell.textContent = cals.toFixed(2) + " kcal";
-        macroCell.innerHTML = `
-            Protein: ${protein.toFixed(2)} g<br>
-            Carbs: ${carbs.toFixed(2)} g<br>
-            Fat: ${fat.toFixed(2)} g
-        `;
+        calCell.textContent = k.toFixed(2) + " kcal";
+
+        macroCell.innerHTML = "Protein: " + p.toFixed(2) + "g<br>" +
+                              "Carbs: " + c.toFixed(2) + "g<br>" +
+                              "Fat: " + f.toFixed(2) + "g";
 
         calculateMealTotal();
     }
 
-    amountInput.addEventListener("input", updateMacros);
+    input.addEventListener("input", updateMacros);
     unitSelect.addEventListener("change", updateMacros);
 
-    updateMacros();
+    updateMacros(); // setup once
 }
 
-// ----------------------------
-// 3. CALCULATE TOTAL CALORIES FOR THE MEAL
-// ----------------------------
+// totals up all the items
 function calculateMealTotal() {
-    const mealTableBody = document.getElementById("mealTable").querySelector("tbody");
-    let totalCals = 0, totalProtein = 0, totalCarbs = 0, totalFats = 0;
+    var table = document.getElementById("mealTable");
+    if (!table) return;
 
-    for (let i = 0; i < mealTableBody.rows.length; i++) {
-        const row = mealTableBody.rows[i];
-        const cals = parseFloat(row.cells[2].textContent) || 0;
-        const protein = parseFloat(row.cells[3].getAttribute("data-protein")) || 0;
-        const carbs = parseFloat(row.cells[3].getAttribute("data-carbs")) || 0;
-        const fat = parseFloat(row.cells[3].getAttribute("data-fat")) || 0;
+    var tbody = table.querySelector("tbody");
+    var totalCals = 0, totalP = 0, totalC = 0, totalF = 0;
 
-        totalCals += cals;
-        totalProtein += protein;
-        totalCarbs += carbs;
-        totalFats += fat;
+    for (var i = 0; i < tbody.rows.length; i++) {
+        var row = tbody.rows[i];
+        totalCals += parseFloat(row.cells[2].textContent) || 0;
+        totalP += parseFloat(row.cells[3].dataset.protein) || 0;
+        totalC += parseFloat(row.cells[3].dataset.carbs) || 0;
+        totalF += parseFloat(row.cells[3].dataset.fat) || 0;
     }
 
     document.getElementById("totalCals").textContent = totalCals.toFixed(2);
-    document.getElementById("totalProtein").textContent = totalProtein.toFixed(2);
-    document.getElementById("totalCarbs").textContent = totalCarbs.toFixed(2);
-    document.getElementById("totalFats").textContent = totalFats.toFixed(2);
+    document.getElementById("totalProtein").textContent = totalP.toFixed(2);
+    document.getElementById("totalCarbs").textContent = totalC.toFixed(2);
+    document.getElementById("totalFats").textContent = totalF.toFixed(2);
 }
 
-// ----------------------------
-// 4. SAVE MEAL FUNCTION
-// ----------------------------
+// saves the dish
 function saveMeal() {
-    const mealName = document.getElementById("mealName").value.trim();
+    const nameInput = document.getElementById("mealName");
+    if (!nameInput) return;
 
-    if (mealName.length === 0) {
-        alert("⚠️ Please enter a meal name.");
+    var mealName = nameInput.value.trim();
+    if (mealName === "") {
+        alert("Please name your dish first.");
         return;
     }
 
-    const mealTableBody = document.getElementById("mealTable").querySelector("tbody");
-    if (mealTableBody.rows.length === 0) {
-        alert("⚠️ Please add at least one item to your meal before saving.");
+    var table = document.getElementById("mealTable");
+    var tbody = table.querySelector("tbody");
+
+    if (tbody.rows.length === 0) {
+        alert("Can't save an empty dish.");
         return;
     }
 
-    let mealItems = [];
-    for (let i = 0; i < mealTableBody.rows.length; i++) {
-        const desc = mealTableBody.rows[i].cells[0].textContent;
-        mealItems.push(desc);
+    var items = [];
+    for (let row of tbody.rows) {
+        items.push(row.cells[0].textContent); // maybe later save amounts too
     }
 
-    // ✅ Capture macros properly
-    const totalProtein = parseFloat(document.getElementById("totalProtein").textContent) || 0;
-    const totalCarbs = parseFloat(document.getElementById("totalCarbs").textContent) || 0;
-    const totalFats = parseFloat(document.getElementById("totalFats").textContent) || 0;
-    const totalCalories = parseFloat(document.getElementById("totalCals").textContent) || 0;
-
-    let postData = {
-        mealName: mealName,
-        items: mealItems,
-        totalProtein: totalProtein,
-        totalCarbs: totalCarbs,
-        totalFats: totalFats,
-        totalCalories: totalCalories
-    };
+    var protein = parseFloat(document.getElementById("totalProtein").textContent) || 0;
+    var carbs = parseFloat(document.getElementById("totalCarbs").textContent) || 0;
+    var fats = parseFloat(document.getElementById("totalFats").textContent) || 0;
+    var calories = parseFloat(document.getElementById("totalCals").textContent) || 0;
 
     fetch("saveMeal.php", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(postData)
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            mealName: mealName,
+            items: items,
+            totalProtein: protein,
+            totalCarbs: carbs,
+            totalFats: fats,
+            totalCalories: calories
+        })
     })
-    .then(response => response.json())
-    .then(data => {
+    .then(function(res) {
+        return res.json();
+    })
+    .then(function(data) {
         if (data.success) {
-            alert("✅ Meal saved successfully!");
-            document.getElementById("mealName").value = "";
-            mealTableBody.innerHTML = "";
+            alert("Dish saved!");
+            nameInput.value = "";
+            tbody.innerHTML = "";
             calculateMealTotal();
         } else {
-            alert("❌ Error saving meal: " + data.error);
+            alert("Error saving dish.");
         }
     })
-    .catch(error => console.error("❌ Error:", error));
+    .catch(function(err) {
+        console.error("save error", err);
+    });
 }
+
+// drag and drop stuff (dashboard)
+
+// allow dropping
+function allowDrop(ev) {
+    ev.preventDefault();
+}
+
+// start dragging
+function drag(ev) {
+    ev.dataTransfer.setData("text/plain", ev.target.dataset.id);
+}
+
+// drop into a zone
+function drop(ev) {
+    ev.preventDefault();
+    var id = ev.dataTransfer.getData("text/plain");
+    var mealBox = document.querySelector(".mealBox[data-id='" + id + "']");
+    var zone = ev.target.closest(".mealZone");
+
+    if (mealBox && zone) {
+        zone.appendChild(mealBox);
+
+        var oldBtn = mealBox.querySelector("button");
+        if (oldBtn) oldBtn.remove();
+
+        var removeBtn = document.createElement("button");
+        removeBtn.textContent = "Remove";
+        removeBtn.className = "removeButton";
+        removeBtn.style.position = "absolute";
+        removeBtn.style.top = "5px";
+        removeBtn.style.right = "5px";
+
+        removeBtn.addEventListener("click", function() {
+            document.getElementById("savedMealsContainer").appendChild(mealBox);
+            removeBtn.remove();
+            addDeleteButton(mealBox);
+            updateDailyTotals();
+        });
+
+        mealBox.appendChild(removeBtn);
+
+        updateDailyTotals();
+    }
+}
+
+// recalculate daily totals
+function updateDailyTotals() {
+    var protein = 0, carbs = 0, fats = 0, calories = 0;
+
+    document.querySelectorAll(".mealZone").forEach(function(zone) {
+        zone.querySelectorAll(".mealBox").forEach(function(meal) {
+            protein += parseFloat(meal.dataset.protein) || 0;
+            carbs += parseFloat(meal.dataset.carbs) || 0;
+            fats += parseFloat(meal.dataset.fat) || 0;
+            calories += parseFloat(meal.dataset.calories) || 0;
+        });
+    });
+
+    document.getElementById("dailyProtein").textContent = protein.toFixed(2);
+    document.getElementById("dailyCarbs").textContent = carbs.toFixed(2);
+    document.getElementById("dailyFats").textContent = fats.toFixed(2);
+    document.getElementById("dailyCalories").textContent = calories.toFixed(2);
+}
+
+// adds delete button back
+function addDeleteButton(mealBox) {
+    var delBtn = document.createElement("button");
+    delBtn.textContent = "Delete";
+    delBtn.className = "deleteButton";
+    delBtn.style.position = "absolute";
+    delBtn.style.top = "5px";
+    delBtn.style.right = "5px";
+
+    delBtn.addEventListener("click", function() {
+        mealBox.remove();
+        updateDailyTotals();
+    });
+
+    mealBox.appendChild(delBtn);
+}
+
+// make saved meals draggable again
+window.addEventListener("DOMContentLoaded", function() {
+    document.querySelectorAll(".mealBox").forEach(function(box) {
+        box.setAttribute("draggable", "true");
+        box.addEventListener("dragstart", drag);
+    });
+});

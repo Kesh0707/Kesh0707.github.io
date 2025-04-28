@@ -1,6 +1,12 @@
 <?php
+// logout.php
+// simple page to log the user out
+
 session_start();
-session_destroy(); // Destroy all session data
-header("Location: myaccount.php"); // Redirect to login page, or choose index.php
-exit();
+session_unset(); // clear session vars
+session_destroy(); // destroy the session
+
+// send back to home page
+header("Location: index.php");
+exit;
 ?>

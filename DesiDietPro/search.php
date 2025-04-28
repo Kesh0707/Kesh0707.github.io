@@ -1,57 +1,59 @@
 <?php
 // search.php
-// PURPOSE: Return a list of descriptions that match the typed input (like "chana", "dal")
+// looks up foods based on user search input
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+session_start();
 header("Content-Type: application/json");
 
-// Database credentials
-$host = "localhost";
-$user = "root";
-$password = "Era3nile867@";
-$database = "food_db";
+// connect to database
+$conn = new mysqli("localhost", "root", "Era3nile867@", "food_db");
 
-$conn = new mysqli($host, $user, $password, $database);
 if ($conn->connect_error) {
-    die(json_encode(["error" => "Database connection failed: " . $conn->connect_error]));
+    echo json_encode(["error" => "Database connection failed"]);
+    exit;
 }
 
-// Check if "search" param is provided
-if (!isset($_GET['search']) || empty(trim($_GET['search']))) {
-    die(json_encode(["error" => "No search term provided"]));
+// check if search term was provided
+if (!isset($_GET['search'])) {
+    echo json_encode(["error" => "Missing search term"]);
+    exit;
 }
 
-$searchTerm = trim($_GET['search']);
-$search = "%" . $searchTerm . "%";
+$search = trim($_GET['search']);
 
-// Query by Description and Category
-$sql = $conn->prepare("
-    SELECT DISTINCT description, protein, carbohydrate, fat_total 
-    FROM general_food 
-    WHERE category LIKE ? OR description LIKE ?
-    ORDER BY description
+// allow short searches like "dal" — just check if totally empty
+if ($search === "") {
+    echo json_encode(["error" => "Please enter something to search"]);
+    exit;
+}
+
+// query the general_food table
+$stmt = $conn->prepare("
+    SELECT description, protein, carbohydrate, fat_total
+    FROM general_food
+    WHERE description LIKE ?
+    LIMIT 10
 ");
 
-if (!$sql) {
-    die(json_encode(["error" => "SQL error: " . $conn->error]));
+// use wildcards for basic matching
+$searchWildcard = "%" . $search . "%";
+$stmt->bind_param("s", $searchWildcard);
+$stmt->execute();
+$res = $stmt->get_result();
+
+// build results
+$foods = [];
+
+while ($row = $res->fetch_assoc()) {
+    $foods[] = $row;
 }
 
-$sql->bind_param("ss", $search, $search);
-$sql->execute();
-$result = $sql->get_result();
-
-$items = [];
-while ($row = $result->fetch_assoc()) {
-    $items[] = $row;
-}
-
-if (count($items) > 0) {
-    echo json_encode(["items" => $items]);
+if (count($foods) > 0) {
+    echo json_encode(["items" => $foods]);
 } else {
-    echo json_encode(["error" => "No matching items found."]);
+    echo json_encode(["error" => "No foods found for '$search'"]);
 }
 
-$sql->close();
+$stmt->close();
 $conn->close();
 ?>

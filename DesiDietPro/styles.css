@@ -1,4 +1,7 @@
-/* Global Style Reset */
+/* styles.css */
+/* basic styling for the site - simple and clean */
+
+/* reset defaults */
 body {
     font-family: 'Segoe UI', sans-serif;
     background-color: #FFF8E1;
@@ -7,15 +10,15 @@ body {
     color: #424242;
 }
 
-/* Header */
+/* header title */
 header h1 {
     color: #FF5722;
     margin: 0;
 }
 
-/* Navigation */
+/* nav bar layout */
 nav ul {
-    list-style-type: none;
+    list-style: none;
     padding: 0;
     margin: 20px 0;
     display: flex;
@@ -28,20 +31,20 @@ nav a {
     color: #fff;
     padding: 10px 18px;
     border-radius: 6px;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.2s;
 }
 
 nav a:hover {
     background-color: #FF5722;
 }
 
-/* Headings */
+/* main headings */
 h2 {
     color: #4CAF50;
     margin-top: 30px;
 }
 
-/* Main Section Layout */
+/* layout for main sections */
 .main-section {
     display: flex;
     flex-direction: column;
@@ -49,6 +52,7 @@ h2 {
     margin-top: 30px;
 }
 
+/* switch to side-by-side if bigger screen */
 @media screen and (min-width: 768px) {
     .main-section {
         flex-direction: row;
@@ -61,48 +65,46 @@ h2 {
         background: #fff;
         padding: 20px;
         border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
 }
 
-/* Inputs */
+/* form inputs */
 input[type="text"],
 input[type="number"],
 input[type="email"],
 select,
 textarea {
+    width: 100%;
     padding: 8px;
+    margin-bottom: 12px;
     font-size: 15px;
     border: none;
     border-radius: 6px;
-    width: 100%;
-    box-sizing: border-box;
-    background-color: #fff;
+    background: #fff;
     box-shadow: 0 0 2px rgba(0,0,0,0.1);
     outline: none;
-    margin-bottom: 12px;
 }
 
-input[type="text"]:focus,
-input[type="number"]:focus,
-input[type="email"]:focus,
+input:focus,
 select:focus,
 textarea:focus {
-    box-shadow: 0 0 5px rgba(76,175,80,0.5);
+    box-shadow: 0 0 5px rgba(76,175,80,0.5); /* green glow when active */
 }
 
-/* Suggestions Box */
+/* food search box */
 #categoryInput {
     margin-bottom: 15px;
 }
 
+/* suggestions list */
 #suggestions {
     list-style: none;
     padding: 0;
     margin-top: 5px;
-    background-color: #fff;
+    background: #fff;
     border-radius: 4px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
 #suggestions li {
@@ -130,18 +132,17 @@ textarea:focus {
     background-color: #388E3C;
 }
 
-/* Meal Table */
+/* meal builder table */
 table {
     width: 100%;
-    max-width: 100%;
     margin-top: 20px;
     border-collapse: collapse;
-    background-color: #fff;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
 th {
-    background-color: #FFC107;
+    background: #FFC107;
     color: #fff;
     padding: 10px;
     text-align: left;
@@ -152,6 +153,7 @@ td {
     border-bottom: 1px solid #eee;
 }
 
+/* remove buttons inside table */
 td button {
     background-color: #FF5722;
     color: #fff;
@@ -165,7 +167,7 @@ td button:hover {
     background-color: #E64A19;
 }
 
-/* Save and Submit Buttons */
+/* save dish button and form submit */
 #saveMealBtn,
 button[type="submit"] {
     background-color: #4CAF50;
@@ -175,7 +177,7 @@ button[type="submit"] {
     border-radius: 6px;
     cursor: pointer;
     margin-top: 10px;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.2s;
 }
 
 #saveMealBtn:hover,
@@ -183,7 +185,7 @@ button[type="submit"]:hover {
     background-color: #388E3C;
 }
 
-/* Footer */
+/* footer */
 footer p {
     text-align: center;
     color: #999;
@@ -191,7 +193,7 @@ footer p {
     margin-top: 40px;
 }
 
-/* Meal Zones for Drag-and-Drop */
+/* meal zones for planning */
 .mealZone,
 #savedMealsContainer {
     border: 2px dashed #FFC107;
@@ -202,129 +204,60 @@ footer p {
     border-radius: 6px;
 }
 
+/* each draggable meal box */
 .mealBox {
     border: 1px solid #ddd;
     padding: 12px;
     margin-bottom: 12px;
-    background-color: #fff;
+    background: #fff;
     border-radius: 4px;
     cursor: grab;
     position: relative;
     box-shadow: 0 1px 4px rgba(0,0,0,0.05);
 }
 
-/* Return Button */
-.returnButton {
+/* buttons inside meal boxes */
+.returnButton, .deleteButton {
     position: absolute;
-    top: 8px;
-    right: 8px;
+    top: 5px;
+    right: 5px;
     background-color: #FF5722;
     color: #fff;
     border: none;
-    padding: 4px 8px;
+    padding: 6px 8px;
+    font-size: 12px;
     border-radius: 3px;
     cursor: pointer;
-    font-size: 12px;
 }
 
-.returnButton:hover {
+.returnButton:hover, .deleteButton:hover {
     background-color: #E64A19;
 }
 
-/* Contact Page Styling */
+/* contact form */
 .contact-section {
     max-width: 700px;
     margin: 0 auto;
     background: #fff;
     padding: 30px 20px;
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-.contact-section form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.contact-section textarea {
-    resize: vertical;
-    min-height: 120px;
-}
-
-/* Login Page Styling */
-.login-section {
+/* login form */
+.login-section, section > form {
     max-width: 400px;
     margin: 0 auto;
     background: #fff;
-    padding: 30px 20px;
+    padding: 24px;
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
-.login-section form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-/* Features Section */
-section h2 {
-    color: #4CAF50;
-    margin-top: 30px;
-    font-size: 28px;
-}
-
-section h3 {
-    color: #FF5722;
-    margin-top: 20px;
-    font-size: 22px;
-}
-
-section p,
-section ul {
-    font-size: 16px;
-    line-height: 1.6;
-    color: #424242;
-    margin-bottom: 20px;
-    max-width: 800px;
-}
-
-section ul {
-    list-style-type: disc;
-    padding-left: 30px;
-}
-
-section ul li strong {
-    color: #FF5722;
-}
-
-/* Header Layout */
-.header-flex {
-    position: relative;
-    padding: 20px;
-}
-
-.header-user {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 10px;
-}
-
-.welcome-left p {
-    margin: 0;
-    font-size: 16px;
-    color: #424242;
-}
-
-.logout-right a {
-    color: #4CAF50;
-    text-decoration: none;
-    font-weight: bold;
-    margin-left: 15px;
-}
-
-.logout-right a:hover {
-    text-decoration: underline;
+/* responsive tweaks */
+@media (max-width: 400px) {
+    section > form {
+        padding: 16px;
+        margin: 20px;
+    }
 }

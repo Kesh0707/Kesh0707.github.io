@@ -36,15 +36,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bind_param("ssddd", $category, $description, $carbs, $protein, $fat);
 
         if ($stmt->execute()) {
-            echo "<p>✅ Food item added successfully!</p>";
+            echo "<p>Food item added successfully!</p>";
             echo "<p><a href='index.php'>Back to Home</a></p>";
         } else {
-            echo "<p>❌ Error inserting food item: " . $stmt->error . "</p>";
+            echo "<p>Error inserting food item: " . $stmt->error . "</p>";
         }
 
         $stmt->close();
     } else {
-        echo "<p>❌ SQL Error: " . $conn->error . "</p>";
+        echo "<p>SQL Error: " . $conn->error . "</p>";
     }
 } else {
     echo "<p>Invalid request method.</p>";

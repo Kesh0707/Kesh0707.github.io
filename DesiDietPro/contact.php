@@ -1,49 +1,54 @@
+<?php
+// contact.php
+// basic contact page for users to send a message
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
     <title>Contact Us - DesiDietPro</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
-        <h1>Contact Us</h1>
-    </header>
 
-    <!-- Navigation Bar -->
-    <nav>
-        <ul>
-            <li><a href="index.php">Home</a></li>
-            <li><a href="about.php">About Us</a></li>
-            <li><a href="features.php">Features</a></li>
-            <li><a href="contact.php">Contact Us</a></li>
-            <li><a href="myaccount.php" class="myaccount-button">My Account</a></li>
-        </ul>
-    </nav>
+<header class="header-flex">
+    <h1>Contact Us</h1>
+</header>
 
-    <section class="contact-section">
-  <h2>We'd love to hear from you!</h2>
-  <p>If you have any questions, feedback, or suggestions, please fill out the form below. We'll get back to you as soon as we can.</p>
+<nav>
+    <ul>
+        <li><a href="index.php">Home</a></li>
+        <li><a href="about.php">About Us</a></li>
+        <li><a href="features.php">Features</a></li>
+        <li><a href="contact.php">Contact Us</a></li>
+        <li><a href="dashboard.php">Dashboard</a></li>
+    </ul>
+</nav>
 
-  <form action="#" method="POST">
-    <label for="name">Your Name:</label>
-    <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+<section class="contact-section">
+    <h2>Send us a message</h2>
 
-    <label for="email">Your Email:</label>
-    <input type="email" id="email" name="email" placeholder="Enter your email address" required>
+    <!-- basic form - doesn't actually send email yet -->
+    <form method="POST" action="#">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
 
-    <label for="message">Your Message:</label>
-    <textarea id="message" name="message" placeholder="Type your message here..." required></textarea>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
 
-    <button type="submit">Send Message</button>
-  </form>
+        <label for="message">Message:</label>
+        <textarea id="message" name="message" rows="4" required></textarea>
+
+        <button type="submit">Send Message</button>
+    </form>
+
+    <!-- TODO: hook this up to a real email handler later -->
 </section>
 
+<footer>
+    <p><small>Website created by Keshav Parikh</small></p>
+</footer>
 
-    <footer>
-        <p><small>Website created by Keshav Parikh</small></p>
-    </footer>
 </body>
 </html>
- 

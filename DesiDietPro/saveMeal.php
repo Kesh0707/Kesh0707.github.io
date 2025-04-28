@@ -27,7 +27,7 @@ if ($conn->connect_error) {
 $inputJSON = file_get_contents('php://input');
 $data = json_decode($inputJSON, true);
 
-// ✅ Correct check: only if keys exist
+// Correct check: only if keys exist
 if (!is_array($data) || 
     !array_key_exists('mealName', $data) || 
     !array_key_exists('items', $data) || 

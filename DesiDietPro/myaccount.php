@@ -1,54 +1,43 @@
 <?php
+// myaccount.php
+// login page - checks user credentials
+
 session_start();
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+$errorMsg = "";
 
-$errorMsg = ""; // Initialize error message variable
+// handle login when form is submitted
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $conn = new mysqli("localhost", "root", "Era3nile867@", "food_db");
 
-// Process login when form is submitted
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    // Database connection details
-    $host = "localhost";
-    $dbUser = "root";
-    $dbPassword = "Era3nile867@";
-    $database = "food_db";
-
-    $conn = new mysqli($host, $dbUser, $dbPassword, $database);
     if ($conn->connect_error) {
-        die("Database connection failed: " . $conn->connect_error);
+        die("Connection failed: " . $conn->connect_error); // basic error
     }
 
-    // Get and sanitize input
     $username = trim($_POST['username']);
-    $passwordPlain = trim($_POST['password']);
+    $password = trim($_POST['password']);
 
-    // Prepare SQL query to fetch user details
+    // simple query to get user info
     $stmt = $conn->prepare("SELECT id, password_hash FROM users WHERE username = ?");
-    if (!$stmt) {
-        $errorMsg = "SQL error: " . $conn->error;
-    } else {
-        $stmt->bind_param("s", $username);
-        $stmt->execute();
-        $result = $stmt->get_result();
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $res = $stmt->get_result();
 
-        // Check if user exists
-        if ($result->num_rows === 1) {
-            $row = $result->fetch_assoc();
-            // Verify the provided password
-            if (password_verify($passwordPlain, $row['password_hash'])) {
-                // Store user details in session and redirect to dashboard.php
-                $_SESSION['user_id'] = $row['id'];
-                $_SESSION['username'] = $username;
-                header("Location: dashboard.php");
-                exit();
-            } else {
-                $errorMsg = "Incorrect password!";
-            }
+    if ($res->num_rows === 1) {
+        $user = $res->fetch_assoc();
+
+        if (password_verify($password, $user['password_hash'])) {
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['username'] = $username;
+            header("Location: dashboard.php");
+            exit;
         } else {
-            $errorMsg = "User not found!";
+            $errorMsg = "Wrong password.";
         }
-        $stmt->close();
+    } else {
+        $errorMsg = "Username not found.";
     }
+
+    $stmt->close();
     $conn->close();
 }
 ?>
@@ -61,33 +50,44 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
-        <h1>Login to DesiDietPro</h1>
-    </header>
-    <nav>
-        <ul>
-            <li><a href="index.php">Home</a></li>
-            <li><a href="about.php">About Us</a></li>
-            <li><a href="features.php">Features</a></li>
-            <li><a href="contact.php">Contact Us</a></li>
-            <li><a href="myaccount.php" class="myaccount-button">My Account</a></li>
-        </ul>
-    </nav>
-    <section>
-        <h2>Log in to DesiDietPro!</h2>
-        <?php if (!empty($errorMsg)): ?>
-            <p style="color:red;"><?php echo htmlspecialchars($errorMsg); ?></p>
-        <?php endif; ?>
-        <form action="myaccount.php" method="POST">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
-            <br>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-            <br>
-            <button type="submit">Login</button>
-        </form>
-        <p>Don't have an account? <a href="register.php" class="register-button">Register here!</a></p>
-    </section>
+
+<header class="header-flex">
+    <h1>Login</h1>
+</header>
+
+<nav>
+    <ul>
+        <li><a href="index.php">Home</a></li>
+        <li><a href="about.php">About Us</a></li>
+        <li><a href="features.php">Features</a></li>
+        <li><a href="contact.php">Contact Us</a></li>
+        <li><a href="dashboard.php">Dashboard</a></li>
+    </ul>
+</nav>
+
+<section class="login-section">
+    <h2>Login to Your Account</h2>
+
+    <?php if (!empty($errorMsg)): ?>
+        <p style="color: red;"><?= htmlspecialchars($errorMsg) ?></p>
+    <?php endif; ?>
+
+    <form method="POST" action="myaccount.php">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+
+        <button type="submit">Login</button>
+    </form>
+
+    <p>Don't have an account? <a href="register.php">Register here</a></p>
+</section>
+
+<footer>
+    <p><small>Website created by Keshav Parikh</small></p>
+</footer>
+
 </body>
 </html>
